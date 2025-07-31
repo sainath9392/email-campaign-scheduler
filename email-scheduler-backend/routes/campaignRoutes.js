@@ -3,7 +3,7 @@ import {
   createCampaign,
   getAllCampaigns,
 } from "../controllers/campaignController.js";
-import authMiddleware from "../middleware/authMiddleware.js";
+
 
 const router = express.Router();
 
