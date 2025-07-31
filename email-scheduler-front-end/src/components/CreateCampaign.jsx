@@ -1,71 +1,96 @@
-// src/components/CreateCampaign.jsx
 import { useState } from "react";
-import { createCampaign } from "../api";
+import { useNavigate } from "react-router-dom";
 
-const CreateCampaign = () => {
-  const [form, setForm] = useState({
-    title: "",
-    message: "",
-    recipients: "",
-    scheduledTime: "",
-  });
+const CreateCampaign = ({ token }) => {
+  const [title, setTitle] = useState("");
+  const [message, setMessage] = useState("");
+  const [recipients, setRecipients] = useState("");
+  const [scheduledTime, setScheduledTime] = useState("");
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const emails = recipients.split(",").map((email) => email.trim());
 
-    const data = {
-      ...form,
-      recipients: form.recipients.split(",").map((email) => email.trim()),
-    };
+    try {
+      const res = await fetch("http://localhost:5000/api/campaigns", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          title,
+          message,
+          recipients: emails,
+          scheduledTime,
+        }),
+      });
 
-    const res = await createCampaign(data);
-    alert(res.message || "Campaign Created");
+      if (res.ok) {
+        alert("Campaign created successfully");
+        navigate("/campaigns");
+      } else {
+        const errorData = await res.json();
+        alert(errorData.message || "Failed to create campaign");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error creating campaign");
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 max-w-md mx-auto">
-      <h2 className="text-xl font-semibold mb-4">Create Campaign</h2>
-
-      <input
-        name="title"
-        placeholder="Title"
-        value={form.title}
-        onChange={handleChange}
-        className="w-full p-2 mb-2 border"
-      />
-      <textarea
-        name="message"
-        placeholder="Message"
-        value={form.message}
-        onChange={handleChange}
-        className="w-full p-2 mb-2 border"
-      />
-      <input
-        name="recipients"
-        placeholder="Recipients (comma-separated)"
-        value={form.recipients}
-        onChange={handleChange}
-        className="w-full p-2 mb-2 border"
-      />
-      <input
-        type="datetime-local"
-        name="scheduledTime"
-        value={form.scheduledTime}
-        onChange={handleChange}
-        className="w-full p-2 mb-2 border"
-      />
-
-      <button
-        type="submit"
-        className="bg-blue-600 text-white px-4 py-2 rounded"
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-6 rounded-lg shadow-md w-full max-w-lg"
       >
-        Submit
-      </button>
-    </form>
+        <h2 className="text-2xl font-bold mb-4 text-center">Create Campaign</h2>
+
+        <input
+          type="text"
+          placeholder="Campaign Title"
+          className="w-full border border-gray-300 rounded px-3 py-2 mb-4"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+        />
+
+        <textarea
+          placeholder="Message (HTML or Plain Text)"
+          className="w-full border border-gray-300 rounded px-3 py-2 mb-4"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          required
+        />
+
+        <input
+          type="text"
+          placeholder="Recipients (comma-separated emails)"
+          className="w-full border border-gray-300 rounded px-3 py-2 mb-4"
+          value={recipients}
+          onChange={(e) => setRecipients(e.target.value)}
+          required
+        />
+
+        <input
+          type="datetime-local"
+          className="w-full border border-gray-300 rounded px-3 py-2 mb-4"
+          value={scheduledTime}
+          onChange={(e) => setScheduledTime(e.target.value)}
+          required
+        />
+
+        <button
+          type="submit"
+          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+        >
+          Submit
+        </button>
+      </form>
+    </div>
   );
 };
 
