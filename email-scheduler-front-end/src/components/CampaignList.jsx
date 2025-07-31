@@ -60,6 +60,22 @@ const CampaignList = ({ token }) => {
                 <p className="text-sm text-gray-500">
                   Scheduled: {new Date(campaign.scheduledTime).toLocaleString()}
                 </p>
+
+                <p className="mt-1 text-sm">
+                  <span className="font-medium">Status:</span>{" "}
+                  <span
+                    className={`inline-block px-2 py-1 rounded text-white text-xs font-semibold ${
+                      campaign.status === "sent"
+                        ? "bg-green-500"
+                        : campaign.status === "failed"
+                        ? "bg-red-500"
+                        : "bg-yellow-500"
+                    }`}
+                  >
+                    {campaign.status || "Pending"}
+                  </span>
+                </p>
+
                 <p className="mt-2 text-gray-700">
                   Recipients:{" "}
                   {campaign.recipients.map((r) => r.email).join(", ")}
@@ -75,7 +91,6 @@ const CampaignList = ({ token }) => {
       </div>
     </div>
   );
-
 };
 
 export default CampaignList;
