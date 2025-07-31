@@ -1,11 +1,10 @@
 // src/api/index.js
 export const API_BASE = import.meta.env.VITE_API_BASE;
 
-const getToken = () => localStorage.getItem("token"); // assuming you stored it after login
 
 export const createCampaign = async (data) => {
   try {
-    const res = await fetch(`${API_BASE}/campaigns`, {
+    const res = await fetch(`${API_BASE}/api/campaigns`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -21,7 +20,7 @@ export const createCampaign = async (data) => {
 
 export const fetchCampaigns = async () => {
   try {
-    const res = await fetch(`${API_BASE}/campaigns`, {
+    const res = await fetch(`${API_BASE}/api/campaigns`, {
       method: "GET",
     });
     return await res.json();
