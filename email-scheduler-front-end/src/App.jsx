@@ -1,35 +1,23 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// src/App.jsx
+import { useState } from "react";
+import CreateCampaign from "./components/CreateCampaign";
+import CampaignList from "./components/CampaignList";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [view, setView] = useState("create");
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+    <div className="text-center">
+      <nav className="p-4 bg-gray-100 mb-4">
+        <button onClick={() => setView("create")} className="mr-4">
+          Create Campaign
         </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+        <button onClick={() => setView("list")}>View Campaigns</button>
+      </nav>
 
-export default App
+      {view === "create" ? <CreateCampaign /> : <CampaignList />}
+    </div>
+  );
+};
+
+export default App;
