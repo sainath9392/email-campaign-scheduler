@@ -4,12 +4,14 @@ import cors from "cors";
 import connectDB from "./config/db.js";
 import campaignRoutes from "./routes/campaignRoutes.js";
 
+
 dotenv.config();
 connectDB();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
 
 app.use("/api/campaigns", campaignRoutes);
 
