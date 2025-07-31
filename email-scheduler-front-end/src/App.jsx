@@ -1,22 +1,52 @@
-// src/App.jsx
-import { useState } from "react";
-import CreateCampaign from "./components/CreateCampaign";
+import { useState, useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+
+
+import Dashboard from "./components/Dashboard";
 import CampaignList from "./components/CampaignList";
+import CreateCampaign from "./components/CreateCampaign";
+import Navbar from "./components/Navbar"; // Optional shared nav bar
 
 const App = () => {
-  const [view, setView] = useState("create");
+
 
   return (
-    <div className="text-center">
-      <nav className="p-4 bg-gray-100 mb-4">
-        <button onClick={() => setView("create")} className="mr-4">
-          Create Campaign
-        </button>
-        <button onClick={() => setView("list")}>View Campaigns</button>
-      </nav>
+    <Router>
+     <Navbar/>
+      <Routes>
+        {/* Default route → Go to login */}
+        <Route path="/" element={<Dashboard />} />
 
-      {view === "create" ? <CreateCampaign /> : <CampaignList />}
-    </div>
+        {/* Protected Routes */}
+        <Route
+          path="/dashboard"
+          element={<Dashboard />
+          
+        }/>
+        <Route
+          path="/campaigns"
+          element={
+           <CampaignList/>
+          }
+        />
+        <Route
+          path="/create"
+          element={
+           <CreateCampaign />
+          }
+        />
+
+
+        
+        {/* Catch-all redirect */}
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </Router>
   );
 };
 

@@ -1,16 +1,32 @@
-// src/api.js
-const BASE_URL = import.meta.env.VITE_API_BASE_URL; // Adjust if deployed
+// src/api/index.js
+const API_BASE = "http://localhost:5000"
+
+const getToken = () => localStorage.getItem("token"); // assuming you stored it after login
 
 export const createCampaign = async (data) => {
-  const res = await fetch(`${BASE_URL}/api/campaigns`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
-  return await res.json();
+  try {
+    const res = await fetch(`${API_BASE}/campaigns`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    return await res.json();
+  } catch (err) {
+    console.error("❌ createCampaign error:", err);
+    return { error: "Network error" };
+  }
 };
 
 export const fetchCampaigns = async () => {
-  const res = await fetch(`${BASE_URL}/api/campaigns`);
-  return await res.json();
+  try {
+    const res = await fetch(`${API_BASE}/campaigns`, {
+      method: "GET",
+    });
+    return await res.json();
+  } catch (err) {
+    console.error("❌ fetchCampaigns error:", err);
+    return { error: "Network error" };
+  }
 };
