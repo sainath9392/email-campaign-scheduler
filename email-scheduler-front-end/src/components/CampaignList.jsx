@@ -59,7 +59,7 @@ const CampaignList = ({ token }) => {
               >
                 <h3 className="font-semibold text-lg">{campaign.title}</h3>
                 <p className="text-sm text-gray-500">
-                  Scheduled: {new Date(campaign.scheduledTime).toLocaleString()}
+                  Scheduled: {new Date(campaign.scheduledTime).toUTCString()}
                 </p>
 
                 <p className="mt-1 text-sm">

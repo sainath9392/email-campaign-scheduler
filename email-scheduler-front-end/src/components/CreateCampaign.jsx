@@ -12,7 +12,26 @@ const CreateCampaign = ({ token }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const emails = recipients.split(",").map((email) => email.trim());
+
+    const emails = recipients
+      .split(",")
+      .map((email) => email.trim())
+      .filter((email) => email.includes("@"));
+
+    if (emails.length === 0) {
+      alert("Please enter at least one valid recipient email.");
+      return;
+    }
+
+    const localDate = new Date(scheduledTime);
+    if (isNaN(localDate)) {
+      alert("Invalid scheduled time.");
+      return;
+    }
+
+    const utcScheduledTime = new Date(
+      localDate.getTime() - localDate.getTimezoneOffset() * 60000
+    );
 
     try {
       const res = await fetch(`${API_BASE}/api/campaigns`, {
@@ -25,20 +44,20 @@ const CreateCampaign = ({ token }) => {
           title,
           message,
           recipients: emails,
-          scheduledTime,
+          scheduledTime: utcScheduledTime.toISOString(),
         }),
       });
 
       if (res.ok) {
-        alert("Campaign created successfully");
+        alert("✅ Campaign created successfully");
         navigate("/campaigns");
       } else {
         const errorData = await res.json();
-        alert(errorData.message || "Failed to create campaign");
+        alert(errorData.message || "❌ Failed to create campaign");
       }
     } catch (err) {
-      console.error(err);
-      alert("Error creating campaign");
+      console.error("Error creating campaign:", err);
+      alert("❌ Something went wrong while creating the campaign.");
     }
   };
 
@@ -48,7 +67,9 @@ const CreateCampaign = ({ token }) => {
         onSubmit={handleSubmit}
         className="bg-white p-6 rounded-lg shadow-md w-full max-w-lg"
       >
-        <h2 className="text-2xl font-bold mb-4 text-center">Create Campaign</h2>
+        <h2 className="text-2xl font-bold mb-4 text-center">
+          📣 Create Campaign
+        </h2>
 
         <input
           type="text"
@@ -86,9 +107,9 @@ const CreateCampaign = ({ token }) => {
 
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition duration-200"
         >
-          Submit
+          🚀 Schedule Campaign
         </button>
       </form>
     </div>
