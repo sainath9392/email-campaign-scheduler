@@ -58,8 +58,14 @@ const CampaignList = ({ token }) => {
                 className="border border-gray-200 p-4 rounded"
               >
                 <h3 className="font-semibold text-lg">{campaign.title}</h3>
+
                 <p className="text-sm text-gray-500">
-                  Scheduled: {new Date(campaign.scheduledTime).toUTCString()}
+                  Scheduled:{" "}
+                  {new Date(campaign.scheduledTime).toLocaleString("en-IN", {
+                    timeZone: "Asia/Kolkata",
+                    dateStyle: "medium",
+                    timeStyle: "short",
+                  })}
                 </p>
 
                 <p className="mt-1 text-sm">
@@ -81,6 +87,7 @@ const CampaignList = ({ token }) => {
                   Recipients:{" "}
                   {campaign.recipients.map((r) => r.email).join(", ")}
                 </p>
+
                 <div className="mt-2 text-gray-600">
                   Message:{" "}
                   <div dangerouslySetInnerHTML={{ __html: campaign.message }} />

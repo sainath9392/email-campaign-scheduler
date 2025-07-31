@@ -29,9 +29,8 @@ const CreateCampaign = ({ token }) => {
       return;
     }
 
-    const utcScheduledTime = new Date(
-      localDate.getTime() - localDate.getTimezoneOffset() * 60000
-    );
+    // ✅ Convert IST local time to UTC
+    const utcScheduledTime = localDate.toISOString();
 
     try {
       const res = await fetch(`${API_BASE}/api/campaigns`, {
@@ -44,7 +43,7 @@ const CreateCampaign = ({ token }) => {
           title,
           message,
           recipients: emails,
-          scheduledTime: utcScheduledTime.toISOString(),
+          scheduledTime: utcScheduledTime,
         }),
       });
 
