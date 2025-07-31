@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { API_BASE } from "../api";
 
 const CampaignList = ({ token }) => {
   const [campaigns, setCampaigns] = useState([]);
@@ -7,7 +8,7 @@ const CampaignList = ({ token }) => {
   useEffect(() => {
     const fetchCampaigns = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/campaigns", {
+        const res = await fetch(`${API_BASE}/api/campaigns`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_BASE } from "../api";
 
 const CreateCampaign = ({ token }) => {
   const [title, setTitle] = useState("");
@@ -14,7 +15,7 @@ const CreateCampaign = ({ token }) => {
     const emails = recipients.split(",").map((email) => email.trim());
 
     try {
-      const res = await fetch("http://localhost:5000/api/campaigns", {
+      const res = await fetch(`${API_BASE}/api/campaigns`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
